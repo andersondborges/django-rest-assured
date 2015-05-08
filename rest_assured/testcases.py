@@ -197,12 +197,15 @@ class DetailAPITestCaseMixin(object):
             self.assertEqual(value, text_type(data[attr]))
 
 
-class CreateAPITestCaseMixin(object):
+class CreateAPITestCaseMixin(object):	
 
     """Adds a create view test to the test case."""
 
     #: *required*: Dictionary of data to use as the POST request's body.
     create_data = None
+
+    #: *required*: set the model primary key field.
+    primary_key = 'id'
 
     def get_create_data(self):
         """Return the data used for the create request.
@@ -251,7 +254,7 @@ class CreateAPITestCaseMixin(object):
 
         # another sanity check:
         # getting the instance from database simply to see that it's found and does not raise any exception
-        created = self.object.__class__.objects.get(id=response.data.get('id'))
+        created = self.object.__class__.objects.get(pk=response.data.get(self.primary_key))
 
         return response, created
 
